@@ -5,7 +5,8 @@ export default createStore({
     userName: "",
     balance: "", 
     avatar: "",
-    transactions: []
+    transactions: [],
+    isLoading: false,
   },
   getters: {
     formattedBalance(state){
@@ -32,10 +33,16 @@ export default createStore({
     },
     setAvatar(state, value){
       state.avatar = value;
-    }
+    },
+    setIsLoading(state, value){
+      state.isLoading = value;
+    },
   },
   actions: {
     loadAppData({ commit, state }) {
+
+      commit('setIsLoading', true);
+
       //Call server to bootstrap data from server
       //-------------------------------------------
       // axios.get('/api/1/pageData?ID=12345')
@@ -96,10 +103,17 @@ export default createStore({
         ]
       }
 
-      commit('setTransactions', data.transactions);
-      commit("setUserName", data.name);
-      commit("setBalance", data.balance);
-      commit("setAvatar", data.avatar);
+      setTimeout(() => {
+        commit('setTransactions', data.transactions);
+        commit("setUserName", data.name);
+        commit("setBalance", data.balance);
+        commit("setAvatar", data.avatar);
+        commit('setIsLoading', false);
+      }, "3000")
+      
+
+
+
     },
   },
   modules: {
